@@ -2,12 +2,32 @@
 
 ## Models
 
+### Face Models
+
 [FER](https://github.com/JustinShenk/fer) is a CNN based on the FER-2013 dataset.
 
 [VGG-Face](https://sefiks.com/2018/08/06/deep-face-recognition-with-keras/) also a CNN based on FER-2013 dataset.
 
 [Emonet](https://github.com/face-analysis/emonet) Official implementation of the paper "Estimation of continuous 
 valence and arousal levels from faces in naturalistic conditions". Pretrained models are available from AffectNet dataset. 
+
+[Facetorch](https://github.com/tomas-gajarsky/facetorch) 
+
+### Speech Models
+
+[speechbrain/emotion-recognition-wav2vec2-IEMOCAP](https://huggingface.co/speechbrain/emotion-recognition-wav2vec2-IEMOCAP) wav2vec based
+easy model trained on IEMOCAP dataset.
+
+[r-f/wav2vec-english-speech-emotion-recognition](https://huggingface.co/r-f/wav2vec-english-speech-emotion-recognition) also wav2vec based. 
+Fine-tuned on several datasets. 
+- Surrey Audio-Visual Expressed Emotion (SAVEE) - 480 audio files from 4 male actors
+- Ryerson Audio-Visual Database of Emotional Speech and Song (RAVDESS) - 1440 audio files from 24 professional actors (12 female, 12 male)
+- Toronto emotional speech set (TESS) - 2800 audio files from 2 female actors
+
+Seems to be based on an english wav2vec model which is a downside. On the other hand the datasets seem english as well so might not be a problem. 
+
+[SenseVoice](https://github.com/FunAudioLLM/SenseVoice) is a speech foundation model with multiple speech understanding capabilities, 
+including automatic speech recognition (ASR), spoken language identification (LID), speech emotion recognition (SER), and audio event detection (AED).
 
 ## Datasets 
 
@@ -34,3 +54,10 @@ video recordings featuring 10 actors portraying 18 affective states, with differ
 [MediaPipe](https://ai.google.dev/edge/mediapipe/solutions/guide) can be used to quickle parse videos into frames for image based models. 
 It has built in models for [Face Detection](https://ai.google.dev/edge/mediapipe/solutions/vision/face_detector), 
 [Pose Landmarks](https://ai.google.dev/edge/mediapipe/solutions/vision/pose_landmarker) and other tasks. 
+
+## Considerations
+
+- Face detection is necessary to detect faces in images and videos.
+- Face tracking may be necessary to track faces in videos where there are multiple faces.
+  - Face tracking which relies on creating new embeddings for each frame is computationally expensive.
+  - Using some technology in order to not have to check the embeddings every frame (e.g. optical flow) is a better option.

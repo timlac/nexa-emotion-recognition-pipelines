@@ -7,7 +7,7 @@ mp_face_mesh = mp.solutions.face_mesh
 face_mesh = mp_face_mesh.FaceMesh(static_image_mode=False, max_num_faces=1)
 
 # Initialize OpenCV to capture the pre-recorded video.
-video_path = '../data/A65_ang_p_2.mov'  # Replace with your video file path
+video_path = '../data/videos/A65_ang_p_2.mov'  # Replace with your video file path
 cap = cv2.VideoCapture(video_path)
 
 # Open a CSV file to write the landmarks data
@@ -37,7 +37,6 @@ with open('landmarks_data.csv', mode='w', newline='') as file:
                     z = landmark.z
                     # Write to the CSV file
                     writer.writerow([frame_index, i, x, y, z])
-
         frame_index += 1
 
     cap.release()

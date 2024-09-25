@@ -7,8 +7,9 @@ from deepface import DeepFace
 # detector = FER(mtcnn=True)  # Use MTCNN for better face detection
 
 # Initialize OpenCV to capture the pre-recorded video.
-video_path = '../data/A65_int_p_3.mov'  # Replace with your video file path
+video_path = '../data/videos/A65_int_p_3.mov'  # Replace with your video file path
 cap = cv2.VideoCapture(video_path)
+
 
 # # Iterate through video frames
 # while cap.isOpened():
