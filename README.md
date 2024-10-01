@@ -11,6 +11,9 @@
 [Emonet](https://github.com/face-analysis/emonet) Official implementation of the paper "Estimation of continuous 
 valence and arousal levels from faces in naturalistic conditions". Pretrained models are available from AffectNet dataset. 
 
+[HSEmotion](https://github.com/av-savchenko/face-emotion-recognition) Multipurpose library. Valence and arousal estimation
+can be achieved using [this model](https://github.com/av-savchenko/face-emotion-recognition/issues/24). 
+
 [Facetorch](https://github.com/tomas-gajarsky/facetorch) 
 
 ### Speech Models
