@@ -1,8 +1,8 @@
 import cv2
 
 # Paths to your two videos
-video_path_1 = '../data/videos/A65_disg_p_2.mov'
-video_path_2 = '../data/videos/A65_ang_p_2.mov'
+video_path_1 = '../data/videos/sentimotion/A65_disg_p_2.mov'
+video_path_2 = '../data/videos/sentimotion/A65_ang_p_2.mov'
 
 # Open the video files
 cap1 = cv2.VideoCapture(video_path_1)

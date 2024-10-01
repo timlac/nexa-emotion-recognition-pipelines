@@ -31,6 +31,8 @@ including automatic speech recognition (ASR), spoken language identification (LI
 
 ## Datasets 
 
+[Hume Vocal Burst Database (H-VB).](https://zenodo.org/records/6320973) referenced [here](https://ieeexplore.ieee.org/abstract/document/10095294). 
+
 [FER-2013](https://paperswithcode.com/dataset/fer2013) contains approximately **30,000** facial RGB images of different
 expressions with size restricted to 48×48, and the main labels of it can be divided into **7 types:
 0=Angry, 1=Disgust, 2=Fear, 3=Happy, 4=Sad, 5=Surprise, 6=Neutral**.
@@ -57,7 +59,27 @@ It has built in models for [Face Detection](https://ai.google.dev/edge/mediapipe
 
 ## Considerations
 
+### Face Detection
+
 - Face detection is necessary to detect faces in images and videos.
 - Face tracking may be necessary to track faces in videos where there are multiple faces.
   - Face tracking which relies on creating new embeddings for each frame is computationally expensive.
   - Using some technology in order to not have to check the embeddings every frame (e.g. optical flow) is a better option.
+- Need to keep track of how many faces are detected in the output format, potentially some logging system to identify when no faces are detected.
+
+### The state of emotion research
+
+Hume AI has interesting models especially for speech emotion recognition.
+
+Models that relies only on facial expression are somewhat limited since they mainly only rely on the facial expression, 
+and does not take into account for example head pose. While some datasets include valence and arousal, e.g. AffectNet, 
+there is no intensity estimation built in for specific emotions. Furthermore, the number of emotions is quite limited. 
+
+Perhaps it would make sense to try to train our own models for emotion recognition using our own dataset (which has 44 different emotions). 
+This however is a complex task that requires both technical knowledge and adequate compute resources. 
+
+### Segmentation of sound
+
+In order to make speech emotion recognition more accurate, we need to be able to segment the audio according to speaker. 
+SOTA models for speaker diarization, that I have seen so far does not seem to perform adequately.
+Have tried Pyannote/speaker diarization so far, see repo nexa-transcription. 

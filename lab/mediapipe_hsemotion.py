@@ -16,7 +16,7 @@ model_name = 'enet_b0_8_va_mtl'  # Model supporting valence-arousal prediction
 emotion_recognizer = HSEmotionRecognizer(model_name=model_name, device='cuda')
 
 # Video capture (you can change '0' to a file path for a video file)
-video_path = "../data/videos/998f4f69-889b-4b20-b6a8-5a3e2b05a565.mkv"
+video_path = "../data/videos/candor/998f4f69-889b-4b20-b6a8-5a3e2b05a565.mkv"
 cap = cv2.VideoCapture(video_path)
 
 # Frame sampling settings

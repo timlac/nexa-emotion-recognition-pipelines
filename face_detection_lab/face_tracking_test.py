@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 # Initialize video capture
-cap = cv2.VideoCapture('../data/videos/998f4f69-889b-4b20-b6a8-5a3e2b05a565.mkv')
+cap = cv2.VideoCapture('../data/videos/candor/998f4f69-889b-4b20-b6a8-5a3e2b05a565.mkv')
 
 # Parameters for Lucas-Kanade optical flow
 lk_params = dict(winSize=(15, 15),
