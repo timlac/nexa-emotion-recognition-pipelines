@@ -1,5 +1,11 @@
 # Emotion Recognition
 
+### TODO
+
+- Do some statistical analysis on the extracted valence and arousal values.
+- Implement the functionality to also run HSEmotion in the generic pipeline. 
+- Evaluate if a different method, e.g. face-alignment, is better for face detection for some videos that are tricky.
+
 ## Models
 
 ### Face Models
@@ -10,11 +16,17 @@
 
 [Emonet](https://github.com/face-analysis/emonet) Official implementation of the paper "Estimation of continuous 
 valence and arousal levels from faces in naturalistic conditions". Pretrained models are available from AffectNet dataset. 
+After doing some validation experiments on the Emonet model, the results are quite counterintuitive both on the 
+FER-2013 and Sentimotion datasets. It seems [other people](https://github.com/face-analysis/emonet/issues/18) have had trouble
+validating the model for AffectNet as well. This could be an issue with how the images are pre-processed, or some
+other issue, needs further investigation.
 
 [HSEmotion](https://github.com/av-savchenko/face-emotion-recognition) Multipurpose library. Valence and arousal estimation
-can be achieved using [this model](https://github.com/av-savchenko/face-emotion-recognition/issues/24). 
+can be achieved using [this model](https://github.com/av-savchenko/face-emotion-recognition/issues/24). Video [demo](https://github.com/av-savchenko/hsemotion-onnx/blob/main/demo/recognize_emotions_video.py).
 
-[Facetorch](https://github.com/tomas-gajarsky/facetorch) 
+[Facetorch](https://github.com/tomas-gajarsky/facetorch) is a Python library that can detect faces and analyze facial features using deep neural networks.
+It gathers open sourced face analysis tools from various sources. Utilizes HSEmotion (above) for emotion recognition and [ELIM](https://github.com/kdhht2334/ELIM_FER)
+for valence/arousal estimation. Currently waiting for a reply on [this issue](https://github.com/tomas-gajarsky/facetorch/issues/78). 
 
 ### Speech Models
 
@@ -31,6 +43,9 @@ Seems to be based on an english wav2vec model which is a downside. On the other 
 
 [SenseVoice](https://github.com/FunAudioLLM/SenseVoice) is a speech foundation model with multiple speech understanding capabilities, 
 including automatic speech recognition (ASR), spoken language identification (LID), speech emotion recognition (SER), and audio event detection (AED).
+
+
+[sustAge](https://github.com/EIHW/sustAGE_ArousalRecognition) Arousal recognition toolkit. 
 
 ## Datasets 
 
@@ -63,6 +78,9 @@ It has built in models for [Face Detection](https://ai.google.dev/edge/mediapipe
 ## Considerations
 
 ### Face Detection
+
+The expected bounding box may vary depending on the FER model used. Emonet uses [face-alignment](https://github.com/1adrianb/face-alignment?tab=readme-ov-file) python lib.
+[Mediapipe](https://ai.google.dev/edge/mediapipe/solutions/vision/face_detector) also seems to used extensively. 
 
 - Face detection is necessary to detect faces in images and videos.
 - Face tracking may be necessary to track faces in videos where there are multiple faces.

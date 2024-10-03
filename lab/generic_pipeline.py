@@ -6,14 +6,7 @@ import csv
 import matplotlib.pyplot as plt
 import torch
 import os
-
-
-# TODO: Add options for processing videos with multiple faces,
-# In the KOSMOS study we are only interested in the leftmost face detected in each frame.
-# TODO: Implement a function to investigate how many faces are detected in each frame. Alert for anomalies.
-# TODO: Add HSemotion option to the pipeline.
-# TODO: Possibly add even more models for emotion recognition
-
+import matplotlib.patches as patches
 
 
 def detect_faces(frame):
@@ -30,10 +23,36 @@ def detect_faces(frame):
             ih, iw, _ = frame.shape
             x, y, w, h = int(bboxC.xmin * iw), int(bboxC.ymin * ih), int(bboxC.width * iw), int(bboxC.height * ih)
             confidence_score = detection.score[0]  # Extract the confidence score
+
+            # Ensure bounding box is within frame boundaries
+            if x < 0 or y < 0 or x + w > iw or y + h > ih:
+                print(f"Bounding box {(x, y, w, h, confidence_score)} is out of frame boundaries. Skipping.")
+                continue
+
             bboxes.append((x, y, w, h, confidence_score))
 
     return bboxes
 
+def plot_frame_with_bboxes(frame, bboxes, save_path=None):
+    """
+    Plots the frame with bounding boxes around detected faces.
+    """
+    plt.imshow(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+    ax = plt.gca()
+
+    for bbox in bboxes:
+        x, y, w, h, _ = bbox
+        rect = patches.Rectangle((x, y), w, h, linewidth=1, edgecolor='r', facecolor='none')
+        ax.add_patch(rect)
+
+    plt.axis('off')
+
+    if save_path:
+        plt.savefig(save_path)
+    else:
+        plt.show()
+
+    plt.close()
 
 def plot_face(face_img, frame_idx, face_id):
     """
@@ -78,24 +97,33 @@ def process_video(video_path: Path, sampling_rate: int, output_csv: Path):
 
                 for face_id, bbox in enumerate(bboxes):
 
-                    # if face_id > 0:
-                    #     continue
+                    try:
+                        # if face_id > 0:
+                        #     continue
 
-                    x, y, w, h, confidence_score  = bbox
-                    face_img = frame[y:y + h, x:x + w]
+                        x, y, w, h, confidence_score  = bbox
+                        face_img = frame[y:y + h, x:x + w]
 
-                    # plot_face(face_img, frame_idx, face_id)
+                        # plot_face(face_img, frame_idx, face_id)
 
-                    # Convert to RGB and resize image to (256, 256)
-                    face_img_rgb = cv2.cvtColor(face_img, cv2.COLOR_BGR2RGB)
-                    res = emotion_predictor.predict_emotion_from_array(face_img_rgb)
+                        # Convert to RGB and resize image to (256, 256)
+                        face_img_rgb = cv2.cvtColor(face_img, cv2.COLOR_BGR2RGB)
+                        res = emotion_predictor.predict_emotion_from_array(face_img_rgb)
 
-                    # print(f"Predicted emotion: {res['predicted_emotion']}, Valence: {res['valence']:.3f}, Arousal: {res['arousal']:.3f}")
+                        # print(f"Predicted emotion: {res['predicted_emotion']}, Valence: {res['valence']:.3f}, Arousal: {res['arousal']:.3f}")
 
-                    row = [frame_idx, timestamp, face_id, confidence_score, res['predicted_emotion'], res['valence'], res['arousal']] + list(res['emotion_prob_dict'].values())
-                    writer.writerow(row)
+                        row = [frame_idx, timestamp, face_id, confidence_score, res['predicted_emotion'], res['valence'], res['arousal']] + list(res['emotion_prob_dict'].values())
+                        writer.writerow(row)
 
-                    # plot_face(face_img, frame_idx, face_id)
+                        # plot_face(face_img, frame_idx, face_id)
+                    except Exception as e:
+                        print(f"Error processing frame {frame_idx}, face {face_id}: {e}")
+                        print("bbox:", bbox)
+                        print("plotting frame with bboxes")
+                        plot_frame_with_bboxes(frame, bboxes)
+                        print("plotting face")
+                        plot_face(face_img, frame_idx, face_id)
+
             frame_idx += 1
 
     video_capture.release()
@@ -106,9 +134,12 @@ def process_video(video_path: Path, sampling_rate: int, output_csv: Path):
 video_dir = Path('/home/tim/.sensitive_data/kosmos/split')
 
 # Iterate over all video files in the directory
-for video_file in video_dir.glob('*.mp4'):
+for idx, video_file in enumerate(video_dir.glob('*.mp4')):
+    if idx == 0:
+        continue
+
     filename = video_file.stem
-    sampling_rate = 10000
+    sampling_rate = 50
     device = 'cuda:0'
     output_csv = Path(f'../out/emotion_predictions_{filename}.csv')
 
