@@ -50,3 +50,9 @@ class HSEmotionModel:
             'arousal': arousal
         }
         return ret
+
+
+if __name__ == '__main__':
+    model = HSEmotionModel()
+
+    print(model.emotion_classes.values())

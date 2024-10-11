@@ -58,7 +58,8 @@ The Disgust expression has the minimal number of images – 600, while other lab
 
 [AffectNet](https://paperswithcode.com/dataset/affectnet) is a large facial expression dataset with around 
 **0.4 million** images manually labeled for the presence of **8 (neutral, happy, angry, sad, fear, surprise, disgust, contempt) 
-facial expressions along with the intensity of valence and arousal**.
+facial expressions along with the intensity of valence and arousal**. Leaderboard for models here:
+[AffectNet Leaderboard](https://paperswithcode.com/sota/emotion-recognition-on-affectnet).
 
 [RAVDESS](https://paperswithcode.com/dataset/ravdess) Ryerson Audio-Visual Database of Emotional Speech and Song (RAVDESS) contains 7,356 files (total size: 24.8 GB). 
 The database contains 24 professional actors (12 female, 12 male), vocalizing two lexically-matched statements 
@@ -104,3 +105,14 @@ This however is a complex task that requires both technical knowledge and adequa
 In order to make speech emotion recognition more accurate, we need to be able to segment the audio according to speaker. 
 SOTA models for speaker diarization, that I have seen so far does not seem to perform adequately.
 Have tried Pyannote/speaker diarization so far, see repo nexa-transcription. 
+
+### Specific Features of interest 
+
+Gaze direction has been shown to be associated with "the underlying behavioral intent (approach-
+avoidance) communicated by an emotional expression” [2]. Milders et al. [42] showed that the gaze
+direction of another person can affect your emotion recognition accuracy and the intensity by
+which you perceive the emotional stimuli. Moreover, results showed that averted gaze is a useful
+feature when detecting fear over happiness or anger and the exact opposite with a direct gaze. In
+addition, [34] indicated that when humans experience embarrassment, they first avert their gaze
+and then subsequently additional expressions occur, such as shifting eye, abnormal speech sounds,
+and smiling. (Snippet from this [paper](data/papers/Crossmodal Embeddings for Emotion Recognition.pdf))

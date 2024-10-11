@@ -8,7 +8,7 @@ import seaborn as sns
 
 Mapper._load_data_if_needed()
 
-file_dir = Path('../out/predictions/sentimotion_emonet_mediapipe')
+file_dir = Path('../out/predictions/sentimotion_hsemotion_mediapipe')
 
 data_summary = []
 
@@ -32,6 +32,23 @@ for p in file_dir.glob('*.csv'):
     data_summary.append(d)
 
 df = pd.DataFrame(data_summary)
+
+
+# Plotting
+plt.figure(figsize=(20, 12))
+sns.scatterplot(data=df, x='mean_valence', y='mean_arousal', hue='emotion', style='emotion', palette='tab10')
+
+# Add labels to each point
+for i in range(df.shape[0]):
+    plt.text(df['mean_valence'][i], df['mean_arousal'][i], f"{df['emotion'][i]} - {df['intensity_level'][i]}" , fontsize=9, ha='right')
+
+plt.xlabel('Mean Valence')
+plt.ylabel('Mean Arousal')
+plt.title('Mean Valence and Arousal by Emotion')
+plt.grid(True)
+plt.legend(title='Emotion', bbox_to_anchor=(1.05, 1), loc='upper left')
+plt.tight_layout()
+plt.show()
 
 # Create a box plot for valence grouped by emotion and intensity level
 plt.figure(figsize=(20, 12))
