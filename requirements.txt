@@ -6,8 +6,8 @@ ffmpeg==1.4
 hsemotion==0.3.0
 matplotlib==3.9.2
 mediapipe==0.10.15
-nexa_definitions_and_mappings==1.91
-nexa_sentimotion_filename_parser==0.7
+git+https://github.com/timlac/nexa_definitions_and_mappings.git@main#egg=nexa_definitions_and_mappings
+git+https://github.com/timlac/nexa_sentimotion_filename_parser.git@main#egg=nexa_sentimotion_filename_parser
 numpy==2.1.2
 opencv_contrib_python==4.10.0.84
 opencv_python==4.10.0.84
