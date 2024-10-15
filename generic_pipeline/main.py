@@ -1,6 +1,5 @@
 import cv2
 from pathlib import Path
-from emonet_utils.predict import EmotionPredictor
 import csv
 from generic_pipeline.face_detection import detect_faces
 from generic_pipeline.utils import plot_frame_with_bboxes

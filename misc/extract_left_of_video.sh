@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Set your input and output directories
-input_dir="original"
-output_dir="split"
+input_dir="/media/user/TIMS-DISK/kosmos/original"
+output_dir="/media/user/TIMS-DISK/kosmos/split"
 
 # Create the output directory if it doesn't exist
 mkdir -p "$output_dir"
