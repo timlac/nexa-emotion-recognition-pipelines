@@ -1,5 +1,5 @@
 deepface==0.0.93
-emonet_utils==0.3
+# emonet_utils==0.3 # not currently in use
 face_alignment==1.4.1
 fer==22.5.1
 ffmpeg==1.4
