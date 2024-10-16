@@ -22,7 +22,8 @@ validating the model for AffectNet as well. This could be an issue with how the 
 other issue, needs further investigation.
 
 [HSEmotion](https://github.com/av-savchenko/face-emotion-recognition) Multipurpose library. Valence and arousal estimation
-can be achieved using [this model](https://github.com/av-savchenko/face-emotion-recognition/issues/24). Video [demo](https://github.com/av-savchenko/hsemotion-onnx/blob/main/demo/recognize_emotions_video.py).
+can be achieved using [this model](https://github.com/av-savchenko/face-emotion-recognition/issues/24). Video [demo](https://github.com/av-savchenko/hsemotion-onnx/blob/main/demo/recognize_emotions_video.py). It's important to have the right version of timm library, 
+see [github comment](https://github.com/av-savchenko/hsemotion/issues/4#issuecomment-1722394042).
 
 [Facetorch](https://github.com/tomas-gajarsky/facetorch) is a Python library that can detect faces and analyze facial features using deep neural networks.
 It gathers open sourced face analysis tools from various sources. Utilizes HSEmotion (above) for emotion recognition and [ELIM](https://github.com/kdhht2334/ELIM_FER)

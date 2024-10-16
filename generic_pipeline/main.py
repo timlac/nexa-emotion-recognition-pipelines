@@ -25,6 +25,13 @@ def frame_generator(video_capture, sr):
 def print_summary_face_counts(face_counts):
     # Print summary statistics
     total_frames = len(face_counts)
+
+    # Print summary statistics
+    total_frames = len(face_counts)
+    if total_frames == 0:
+        print("SUMMARY: No frames to process.")
+        return
+
     zero_faces = sum(1 for count in face_counts.values() if count == 0)
     one_face = sum(1 for count in face_counts.values() if count == 1)
     multiple_faces = total_frames - zero_faces - one_face
@@ -72,7 +79,7 @@ def process_video(video_path: Path, sr: int, output_csv: Path):
             if len(bboxes) != 1:
                 print(
                     f"detected {len(bboxes)} faces in video {filename}: {len(bboxes)} for frame {frame_idx}... skipping")
-                plot_frame_with_bboxes(frame, bboxes, save_path=f'../out/frame_data/{filename}_frame_{frame_idx}.png')
+                # plot_frame_with_bboxes(frame, bboxes, save_path=f'../out/frame_data/{filename}_frame_{frame_idx}.png')
                 continue
 
             for face_id, bbox in enumerate(bboxes):
@@ -107,9 +114,6 @@ emotion_predictor = HSEmotionModel()
 def process_dir(input_dir: Path, output_dir: Path, sr):
     # Iterate over all video files in the directory
     for idx, video_file in enumerate(input_dir.glob('*.mp4')):
-
-        if idx < 6:
-            continue
         filename = video_file.stem
         print(f"Processing video: {filename}")
 
@@ -131,13 +135,17 @@ def process_sinlge_file(filepath: Path, output_dir: Path, sr):
 if __name__ == '__main__':
     sampling_rate = 10
 
+    video_dir = Path('/media/user/TIMS-DISK/kosmos/split')
+    out_dir = Path("/media/user/TIMS-DISK/kosmos/out/hsemotion_mediapipe_preds")
+    process_dir(video_dir, out_dir, sampling_rate)
+
     # video_dir = Path('/home/tim/.sensitive_data/kosmos/split')
     # out_dir = Path("../out/predictions/kosmos_hsemotion_mediapipe")
     # process_dir(video_dir, out_dir, sampling_rate)
 
-    video_dir = Path("../data/videos/sentimotion")
-    out_dir = Path("../out/predictions/sentimotion_hsemotion_mediapipe")
-    process_dir(video_dir, out_dir, sampling_rate)
+    # video_dir = Path("../data/videos/sentimotion")
+    # out_dir = Path("../out/predictions/sentimotion_hsemotion_mediapipe")
+    # process_dir(video_dir, out_dir, sampling_rate)
 
     # file_path = Path('/home/tim/.sensitive_data/kosmos/split/KOSMOS021_RMW_LSI_LEFT.mp4')
     # process_sinlge_file(file_path)
