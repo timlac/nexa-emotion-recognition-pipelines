@@ -3,6 +3,22 @@ import matplotlib.patches as patches
 import cv2
 
 
+def frame_generator(video_capture, sr):
+    """
+    :param video_capture: cv2.VideoCapture object
+    :param sr: sampling rate
+    :return: generator of frames
+    """
+    frame_idx = 0
+    while video_capture.isOpened():
+        ret, frame = video_capture.read()
+        if not ret:
+            break
+        if frame_idx % sr == 0:
+            yield frame_idx, frame
+        frame_idx += 1
+
+
 def plot_frame_with_bboxes(frame, bboxes, save_path=None):
     """
     Plots the frame with bounding boxes around detected faces and confidence scores.

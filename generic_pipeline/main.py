@@ -2,24 +2,8 @@ import cv2
 from pathlib import Path
 import csv
 from generic_pipeline.face_detection import detect_faces
-from generic_pipeline.utils import plot_frame_with_bboxes
+from generic_pipeline.utils import plot_frame_with_bboxes, frame_generator
 from generic_pipeline.hsemotion_model import HSEmotionModel
-
-
-def frame_generator(video_capture, sr):
-    """
-    :param video_capture: cv2.VideoCapture object
-    :param sr: sampling rate
-    :return: generator of frames
-    """
-    frame_idx = 0
-    while video_capture.isOpened():
-        ret, frame = video_capture.read()
-        if not ret:
-            break
-        if frame_idx % sr == 0:
-            yield frame_idx, frame
-        frame_idx += 1
 
 
 def print_summary_face_counts(face_counts):
