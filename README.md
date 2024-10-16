@@ -90,6 +90,17 @@ The expected bounding box may vary depending on the FER model used. Emonet uses 
   - Using some technology in order to not have to check the embeddings every frame (e.g. optical flow) is a better option.
 - Need to keep track of how many faces are detected in the output format, potentially some logging system to identify when no faces are detected.
 
+Currently looking into using vector indexes along with deepface to index all the faces in a video in the index 
+and then query similar faces. Current problem is that I need to perform range search to do this. But potentially 
+it would be sufficient to just retrieve all the items with their distances to some image and filter out the ones that are too far away.
+
+However, this method might fail if the image we use as reference happens to be in a weird light or similar. 
+
+It would be optimal if we could cluster all the vector in some way that picks the number of clusters dynamically.... 
+Perhaps we could use Silhouette Score for this, however now we're getting into more complex solutions which might slow down
+the computation time... 
+
+
 ### The state of emotion research
 
 Hume AI has interesting models especially for speech emotion recognition.
