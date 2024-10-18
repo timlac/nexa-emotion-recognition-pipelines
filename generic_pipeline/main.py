@@ -60,6 +60,13 @@ def process_video(video_path: Path, sr: int, output_csv: Path):
             # Sort bounding boxes by x-coordinate (left to right)
             # bboxes.sort(key=lambda item: item[0])
 
+            # TODO: As it currently stands, we discard frames with multiple faces.
+            # Since most frames should only contain one face the second face is likely a false positive with low confidence,
+            # thus, we could quite safely simply process the face with the highest confidence.
+            # Sort bounding boxes by confidence score (highest to lowest)
+            # bboxes.sort(key=lambda item: item[4], reverse=True)
+
+            # TODO: only discard frames with 0 faces detected
             if len(bboxes) != 1:
                 print(
                     f"detected {len(bboxes)} faces in video {filename}: {len(bboxes)} for frame {frame_idx}... skipping")

@@ -2,10 +2,8 @@
 
 ### TODO
 
-- Do some statistical analysis on the extracted valence and arousal values.
-- Implement the functionality to also run HSEmotion in the generic pipeline. 
+- **Look into using the face with the highest confidence score in the generic pipeline if multiple faces are detected.**
 - Evaluate if a different method, e.g. face-alignment, is better for face detection for some videos that are tricky.
-
 ## Models
 
 ### Face Models
