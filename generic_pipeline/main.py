@@ -4,30 +4,7 @@ import csv
 from generic_pipeline.face_detection import detect_faces
 from generic_pipeline.utils import plot_frame_with_bboxes, frame_generator
 from generic_pipeline.hsemotion_model import HSEmotionModel
-
-
-def print_summary_face_counts(face_counts):
-    # Print summary statistics
-    total_frames = len(face_counts)
-
-    # Print summary statistics
-    total_frames = len(face_counts)
-    if total_frames == 0:
-        print("SUMMARY: No frames to process.")
-        return
-
-    zero_faces = sum(1 for count in face_counts.values() if count == 0)
-    one_face = sum(1 for count in face_counts.values() if count == 1)
-    multiple_faces = total_frames - zero_faces - one_face
-
-    zero_faces_pct = (zero_faces / total_frames) * 100
-    one_face_pct = (one_face / total_frames) * 100
-    multiple_faces_pct = (multiple_faces / total_frames) * 100
-
-    print(f"SUMMARY: Total frames: {total_frames}")
-    print(f"SUMMARY: Frames with 0 faces: {zero_faces} ({zero_faces_pct:.2f}%)")
-    print(f"SUMMARY: Frames with 1 face: {one_face} ({one_face_pct:.2f}%)")
-    print(f"SUMMARY: Frames with multiple faces: {multiple_faces} ({multiple_faces_pct:.2f}%)")
+from summary_logger import SummaryLogger
 
 
 def process_video(video_path: Path, sr: int, output_csv: Path):
@@ -95,12 +72,8 @@ def process_video(video_path: Path, sr: int, output_csv: Path):
 
     video_capture.release()
     print(f"SUMMARY: Summary for video {filename}:")
-    print_summary_face_counts(face_counts)
+    summary_logger.log_summary(face_counts, filename)
 
-# device = 'cuda:0'
-# emotion_predictor = EmotionPredictor(device)
-
-emotion_predictor = HSEmotionModel()
 
 def process_dir(input_dir: Path, output_dir: Path, sr):
     # Iterate over all video files in the directory
@@ -122,12 +95,15 @@ def process_sinlge_file(filepath: Path, output_dir: Path, sr):
     process_video(filepath, sr, output_csv)
 
 
+emotion_predictor = HSEmotionModel(model_name="enet_b2_8_best")
+summary_logger = SummaryLogger('/media/user/TIMS-DISK/kosmos/out/hsemotion_enet_b2_8_best_mediapipe_preds_log_summary.csv')
+
 
 if __name__ == '__main__':
     sampling_rate = 10
 
     video_dir = Path('/media/user/TIMS-DISK/kosmos/split')
-    out_dir = Path("/media/user/TIMS-DISK/kosmos/out/hsemotion_mediapipe_preds")
+    out_dir = Path("/media/user/TIMS-DISK/kosmos/out/hsemotion_enet_b2_8_best_mediapipe_preds")
     process_dir(video_dir, out_dir, sampling_rate)
 
     # video_dir = Path('/home/tim/.sensitive_data/kosmos/split')

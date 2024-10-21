@@ -40,8 +40,13 @@ class HSEmotionModel:
         emotion_dict = {self.emotion_classes[i]: float(prob) for i, prob in enumerate(emotion_probabilities)}
 
         predicted_emotion_class = self.emotion_classes[torch.argmax(emotion_probabilities).item()]
-        valence = logits[8].item()
-        arousal = logits[9].item()
+
+        if self.model_name == "enet_b0_8_va_mtl":
+            valence = logits[8].item()
+            arousal = logits[9].item()
+        else:
+            valence = None
+            arousal = None
 
         ret = {
             'emotion_prob_dict': emotion_dict,
