@@ -48,6 +48,10 @@ including automatic speech recognition (ASR), spoken language identification (LI
 
 ## Datasets 
 
+[VGGFace2](https://github.com/ox-vgg/vgg_face2) The dataset contains 3.31 million images of 9131 subjects (identities), 
+with an average of 362.6 images for each subject. Images are downloaded from Google Image Search and have large variations in pose, age, 
+illumination, ethnicity and profession (e.g. actors, athletes, politicians). 
+
 [Hume Vocal Burst Database (H-VB).](https://zenodo.org/records/6320973) referenced [here](https://ieeexplore.ieee.org/abstract/document/10095294). 
 
 [FER-2013](https://paperswithcode.com/dataset/fer2013) contains approximately **30,000** facial RGB images of different
