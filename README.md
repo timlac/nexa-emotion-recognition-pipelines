@@ -21,7 +21,7 @@ other issue, needs further investigation.
 
 [HSEmotion](https://github.com/av-savchenko/face-emotion-recognition) Multipurpose library. Valence and arousal estimation
 can be achieved using [this model](https://github.com/av-savchenko/face-emotion-recognition/issues/24). Video [demo](https://github.com/av-savchenko/hsemotion-onnx/blob/main/demo/recognize_emotions_video.py). It's important to have the right version of timm library, 
-see [github comment](https://github.com/av-savchenko/hsemotion/issues/4#issuecomment-1722394042).
+see [github comment](https://github.com/av-savchenko/hsemotion/issues/4#issuecomment-1722394042). Seems to be trained on VGG-Face2 dataset.
 
 [Facetorch](https://github.com/tomas-gajarsky/facetorch) is a Python library that can detect faces and analyze facial features using deep neural networks.
 It gathers open sourced face analysis tools from various sources. Utilizes HSEmotion (above) for emotion recognition and [ELIM](https://github.com/kdhht2334/ELIM_FER)
@@ -130,3 +130,10 @@ feature when detecting fear over happiness or anger and the exact opposite with 
 addition, [34] indicated that when humans experience embarrassment, they first avert their gaze
 and then subsequently additional expressions occur, such as shifting eye, abnormal speech sounds,
 and smiling. (Snippet from this [paper](data/papers/Crossmodal Embeddings for Emotion Recognition.pdf))
+
+
+### Validation 
+
+Try validating emonet on sentimotion subset using face_alignment library for face detection instead of mediapipe. 
+
+Results using mediapipe on sentimotion are very strange. 
