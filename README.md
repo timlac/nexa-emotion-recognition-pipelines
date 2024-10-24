@@ -4,6 +4,11 @@
 
 - **Look into using the face with the highest confidence score in the generic pipeline if multiple faces are detected.**
 - Evaluate if a different method, e.g. face-alignment, is better for face detection for some videos that are tricky.
+- **Implement openface style output files:** 
+  - Write all frames to csv regardless if face is captured or not, set success to 0 if no face is detected.
+  - Potentially get rid of the strict confidence threshold
+  - If there are multiple faces detected, either choose the one with the highest confidence score or simply write both to the csv (as face 0, face 1, etc.)
+
 ## Models
 
 ### Face Models
