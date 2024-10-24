@@ -1,7 +1,21 @@
-import os
-sensitive_data_path = os.getenv("SENSITIVE_DATA_DIR")
+import pandas as pd
 
-print(sensitive_data_path)
 
-# with open(os.path.join(sensitive_data_path, '/kosmos/split/KOSMOS077_IS_LSI_LEFT.mp4'), 'r') as f:
-#     data = f.read()
+emotion_classes = {
+    0: 'anger',
+    1: 'contempt',
+    2: 'disgust',
+    3: 'fear',
+    4: 'happiness',
+    5: 'neutral',
+    6: 'sadness',
+    7: 'surprise'
+}
+
+df = pd.read_csv("../out/predictions/KOSMOS027_GK_BAS_LEFT.csv")
+
+df_success = df[df["success"] == 1]
+
+print(df_success)
+
+print(df[df.index == 55])

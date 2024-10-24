@@ -3,6 +3,23 @@ import matplotlib.patches as patches
 import cv2
 
 
+
+def initialize_frame_dict(emotion_classes):
+    ret = {'frame': None,
+           'timestamp': None,
+           'face_id': 0,
+           'num_faces': 0,
+           'success': 0,
+           'confidence_score': 0,
+           'predicted_emotion': None,
+           'valence': 0,
+           'arousal': 0
+           }
+
+    for emotion in emotion_classes:
+        ret[emotion] = 0
+    return ret
+
 def frame_generator(video_capture, sr):
     """
     :param video_capture: cv2.VideoCapture object

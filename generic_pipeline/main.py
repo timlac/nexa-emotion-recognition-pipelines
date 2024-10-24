@@ -1,109 +1,105 @@
+import time
+
 import cv2
 from pathlib import Path
 import csv
 from generic_pipeline.face_detection import detect_faces
-from generic_pipeline.utils import plot_frame_with_bboxes, frame_generator
+from generic_pipeline.utils import plot_frame_with_bboxes, frame_generator, initialize_frame_dict
 from generic_pipeline.hsemotion_model import HSEmotionModel
-from generic_pipeline.summary_logger import SummaryLogger
+
+
+def get_face(bbox, frame):
+    x, y, w, h, confidence_score = bbox
+    face_img = frame[y:y + h, x:x + w]
+    face_img_rgb = cv2.cvtColor(face_img, cv2.COLOR_BGR2RGB)
+    return face_img_rgb, confidence_score
+
+
+def process_frame(frame):
+    ret = initialize_frame_dict(emotion_classes)
+
+    bboxes = detect_faces(frame)
+
+    num_faces = len(bboxes)
+    if num_faces == 0 or num_faces > 1:
+        ret['num_faces'] = num_faces
+
+    else:
+        face_img_rgb, confidence_score = get_face(bboxes[0], frame)
+        prediction = emotion_predictor.predict_emotions(face_img_rgb)
+        ret['num_faces'] = num_faces
+        ret['success'] = 1
+        ret['confidence_score'] = confidence_score
+        ret.update(prediction)
+
+    return ret
 
 
 def process_video(video_path: Path, sr: int, output_csv: Path):
     """
     Processes a video frame-by-frame to detect faces and predict emotions.
     """
-    filename = video_path.stem
-
     video_capture = cv2.VideoCapture(str(video_path))
     fps = video_capture.get(cv2.CAP_PROP_FPS)
-
-    face_counts = {}
+    total_frames = int(video_capture.get(cv2.CAP_PROP_FRAME_COUNT))
 
     with open(output_csv, mode='w', newline='') as file:
         writer = csv.writer(file)
-        header = ['Frame', 'Timestamp', 'Face_ID', 'Confidence_Score', 'Predicted_Emotion', 'Valence',
-                  'Arousal'] + list(emotion_predictor.emotion_classes.values())
-        writer.writerow(header)
+
+        temp_frame_dict = initialize_frame_dict(emotion_classes)
+        writer.writerow(temp_frame_dict.keys())
 
         for frame_idx, frame in frame_generator(video_capture, sr):
+            if frame_idx % 1000 == 0:
+                print(f"Processing frame {frame_idx} out of {total_frames}")
 
-            bboxes = detect_faces(frame)
-            timestamp = frame_idx / fps
-
-            num_faces = len(bboxes)
-            face_counts[frame_idx] = num_faces
-
-            print(f"Detected {len(bboxes)} faces in frame {frame_idx}")
-
-            # Sort bounding boxes by x-coordinate (left to right)
-            # bboxes.sort(key=lambda item: item[0])
-
-            # TODO: As it currently stands, we discard frames with multiple faces.
-            # Since most frames should only contain one face the second face is likely a false positive with low confidence,
-            # thus, we could quite safely simply process the face with the highest confidence.
-            # Sort bounding boxes by confidence score (highest to lowest)
-            # bboxes.sort(key=lambda item: item[4], reverse=True)
-
-            # TODO: only discard frames with 0 faces detected
-            if len(bboxes) != 1:
-                print(
-                    f"detected {len(bboxes)} faces in video {filename}: {len(bboxes)} for frame {frame_idx}... skipping")
-                # plot_frame_with_bboxes(frame, bboxes, save_path=f'../out/frame_data/{filename}_frame_{frame_idx}.png')
+            try:
+                frame_dict = process_frame(frame)
+            except Exception as e:
+                print(f"Error processing frame {frame_idx}: {e}")
                 continue
 
-            for face_id, bbox in enumerate(bboxes):
+            frame_dict['frame'] = frame_idx
+            frame_dict['timestamp'] = frame_idx / fps
 
-                try:
-                    x, y, w, h, confidence_score = bbox
-                    face_img = frame[y:y + h, x:x + w]
-
-                    face_img_rgb = cv2.cvtColor(face_img, cv2.COLOR_BGR2RGB)
-                    # res = emotion_predictor.predict_emotion_from_array(face_img_rgb)
-
-                    res = emotion_predictor.predict_emotions(face_img_rgb)
-
-                    row = [frame_idx, timestamp, face_id, confidence_score, res['predicted_emotion'], res['valence'],
-                           res['arousal']] + list(res['emotion_prob_dict'].values())
-                    writer.writerow(row)
-
-                    # plot_face(face_img, frame_idx, face_id)
-                except Exception as e:
-                    print(f"Error processing frame {frame_idx}, face {face_id}: {e}")
-                    continue
+            writer.writerow(frame_dict.values())
 
     video_capture.release()
-    print(f"SUMMARY: Summary for video {filename}:")
-    summary_logger.log_summary(face_counts, filename)
 
 
 def process_dir(input_dir: Path, output_dir: Path, sr):
     # Iterate over all video files in the directory
     for idx, video_file in enumerate(input_dir.glob('*.mp4')):
         filename = video_file.stem
-        print(f"Processing video: {filename}")
+        print(f"summary - Processing video: {filename}")
 
         output_csv = Path(f'{output_dir}/{filename}.csv')
         # Process the video
+        start = time.time()
         process_video(video_file, sr, output_csv)
+        stop = time.time()
+        processing_time_minutes = (stop - start) / 60
+        print(f"summary - Done processing video: {filename}")
+        print(f"summary - Processing took {processing_time_minutes:.2f} minutes.")
 
 
-def process_sinlge_file(filepath: Path, output_dir: Path, sr):
+def process_single_file(filepath: Path, output_dir: Path, sr):
     filename = filepath.stem
     print(f"Processing video: {filename}")
 
-    output_csv = Path(f'../out/emotion_predictions_{filename}.csv')
+    output_csv = Path(f'../out/predictions/{filename}.csv')
     # Process the video
     process_video(filepath, sr, output_csv)
 
 
-emotion_predictor = HSEmotionModel(model_name="enet_b2_8_best")
-summary_logger = SummaryLogger('/media/user/TIMS-DISK/kosmos/out/hsemotion_enet_b2_8_best_mediapipe_preds_log_summary.csv')
-
+emotion_predictor = HSEmotionModel(model_name="enet_b0_8_va_mtl")
+emotion_classes = emotion_predictor.emotion_classes.values()
 
 if __name__ == '__main__':
-    sampling_rate = 10
+    sampling_rate = 5
 
     video_dir = Path('/media/user/TIMS-DISK/kosmos/split')
-    out_dir = Path("/media/user/TIMS-DISK/kosmos/out/hsemotion_enet_b2_8_best_mediapipe_preds")
+    out_dir = Path("/media/user/TIMS-DISK/kosmos/out/hsemotion_enet_b0_8_va_mtl_mediapipe_preds_better_output")
     process_dir(video_dir, out_dir, sampling_rate)
 
     # video_dir = Path('/home/tim/.sensitive_data/kosmos/split')
@@ -114,6 +110,6 @@ if __name__ == '__main__':
     # out_dir = Path("../out/predictions/sentimotion_hsemotion_mediapipe")
     # process_dir(video_dir, out_dir, sampling_rate)
 
-    # file_path = Path('/home/tim/.sensitive_data/kosmos/split/KOSMOS021_RMW_LSI_LEFT.mp4')
-    # process_sinlge_file(file_path)
-
+    # file_path = Path('/media/user/TIMS-DISK/kosmos/split/KOSMOS027_GK_BAS_LEFT.mp4')
+    # out_dir = Path("../out/predictions/test")
+    # process_single_file(file_path, out_dir, sampling_rate)

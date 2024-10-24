@@ -4,14 +4,14 @@ from hsemotion.facial_emotions import HSEmotionRecognizer
 
 class HSEmotionModel:
     emotion_classes = {
-        0: 'Anger',
-        1: 'Contempt',
-        2: 'Disgust',
-        3: 'Fear',
-        4: 'Happiness',
-        5: 'Neutral',
-        6: 'Sadness',
-        7: 'Surprise'
+        0: 'anger',
+        1: 'contempt',
+        2: 'disgust',
+        3: 'fear',
+        4: 'happiness',
+        5: 'neutral',
+        6: 'sadness',
+        7: 'surprise'
     }
 
     def __init__(self, model_name: str = 'enet_b0_8_va_mtl', device: str = 'cuda'):
@@ -49,11 +49,12 @@ class HSEmotionModel:
             arousal = None
 
         ret = {
-            'emotion_prob_dict': emotion_dict,
             'predicted_emotion': predicted_emotion_class,
             'valence': valence,
             'arousal': arousal
         }
+        ret.update(emotion_dict)
+
         return ret
 
 
