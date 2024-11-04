@@ -45,8 +45,8 @@ class HSEmotionModel:
             valence = logits[8].item()
             arousal = logits[9].item()
         else:
-            valence = None
-            arousal = None
+            valence = 0
+            arousal = 0
 
         ret = {
             'predicted_emotion': predicted_emotion_class,

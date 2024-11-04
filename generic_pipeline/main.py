@@ -92,14 +92,14 @@ def process_single_file(filepath: Path, output_dir: Path, sr):
     process_video(filepath, sr, output_csv)
 
 
-emotion_predictor = HSEmotionModel(model_name="enet_b0_8_va_mtl")
+emotion_predictor = HSEmotionModel(model_name="enet_b2_8_best")
 emotion_classes = emotion_predictor.emotion_classes.values()
 
 if __name__ == '__main__':
     sampling_rate = 5
 
     video_dir = Path('/media/user/TIMS-DISK/kosmos/split')
-    out_dir = Path("/media/user/TIMS-DISK/kosmos/out/hsemotion_enet_b0_8_va_mtl_mediapipe_preds_better_output")
+    out_dir = Path("/media/user/TIMS-DISK/kosmos/out/hsemotion_enet_b2_8_best_mediapipe_preds_better_output")
     process_dir(video_dir, out_dir, sampling_rate)
 
     # video_dir = Path('/home/tim/.sensitive_data/kosmos/split')
